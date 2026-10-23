@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/applications").hasRole("CUSTOMER")
                         .requestMatchers(HttpMethod.POST, "/api/v1/applications/*/documents").hasRole("CUSTOMER")
                         .requestMatchers(HttpMethod.POST, "/api/v1/applications/*/submit").hasRole("CUSTOMER")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/applications/*/documents/*/content").hasAnyRole("CUSTOMER", "REVIEWER")
                         .requestMatchers(HttpMethod.GET, "/api/v1/applications/*").hasAnyRole("CUSTOMER", "REVIEWER")
                         .requestMatchers(HttpMethod.GET, "/api/v1/applications/*/documents").hasAnyRole("CUSTOMER", "REVIEWER")
                         .anyRequest().permitAll())

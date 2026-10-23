@@ -22,6 +22,12 @@ public class ApplicationFileStorage {
         try { Files.createDirectories(directory); Files.write(target, bytes); return key; }
         catch (IOException exception) { throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "FILE_STORAGE_FAILED", "The document could not be stored"); }
     }
+    public byte[] read(String storageKey) {
+        Path target = directory.resolve(storageKey).normalize();
+        if (!target.getParent().equals(directory)) throw new ApiException(HttpStatus.BAD_REQUEST, "INVALID_FILE", "Invalid file name");
+        try { return Files.readAllBytes(target); }
+        catch (IOException exception) { throw new ApiException(HttpStatus.NOT_FOUND, "FILE_NOT_FOUND", "The stored document is not available"); }
+    }
     public String extension(byte[] bytes) {
         if (starts(bytes, "%PDF-".getBytes())) return "pdf";
         if (starts(bytes, new byte[]{(byte) 0x89, 'P', 'N', 'G', 13, 10, 26, 10})) return "png";

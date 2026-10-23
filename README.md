@@ -86,3 +86,18 @@ See [API contracts](docs/api-contracts.md), [architecture](docs/architecture.md)
 - RAG needs a provider key and V4 on a confirmed Neon branch. Neither provider calls nor pgvector/Neon migration application is claimed verified by local builds.
 - Filesystem uploads on a Docker volume are demo storage, not managed object storage or a production backup strategy.
 - Compliance checks (KYC, sanctions, bureau, regulatory) are marked unavailable/human-review; no such integrations ran.
+## Demo data
+
+For a local walkthrough, set `DEMO_DATA_ENABLED=true` in `.env` before starting
+the backend. The idempotent demo bootstrap creates two catalogue products, a
+customer account, two applications in the reviewer queue, sample uploaded PDF
+files, automated check results, and application status/audit records. It never
+creates duplicate records for the same demo references.
+
+Demo customer login:
+
+- Username: `demo.customer`
+- Password: `DemoCustomer123!`
+
+The configured reviewer credentials from `.env` open the reviewer queue. Demo
+files are clearly labelled and must not be treated as real applicant evidence.

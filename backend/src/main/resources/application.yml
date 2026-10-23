@@ -31,6 +31,10 @@ spring:
     locations: classpath:db/migration
 
 app:
+  demo-data:
+    enabled: ${DEMO_DATA_ENABLED:false}
+    customer-username: ${DEMO_CUSTOMER_USERNAME:demo.customer}
+    customer-password: ${DEMO_CUSTOMER_PASSWORD:DemoCustomer123!}
   auth:
     reviewer-username: ${REVIEWER_USERNAME:}
     reviewer-password: ${REVIEWER_PASSWORD:}

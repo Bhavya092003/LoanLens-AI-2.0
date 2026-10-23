@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface LoanProductRepository extends JpaRepository<LoanProduct, UUID> {
+    java.util.Optional<LoanProduct> findByProductCode(String productCode);
     @Query("select p from LoanProduct p where p.active = true "
             + "and lower(p.loanType) = lower(:loanType) "
             + "and (:amount is null or (p.minimumAmount <= :amount and p.maximumAmount >= :amount))")

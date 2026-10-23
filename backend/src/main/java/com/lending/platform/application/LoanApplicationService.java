@@ -275,6 +275,20 @@ public class LoanApplicationService {
     }
 
     @Transactional(readOnly = true)
+    public ApplicationDocument getDocument(UUID applicationId, UUID documentId) {
+        ApplicationDocument document = documents.findById(documentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Application document"));
+        if (!document.getApplication().getId().equals(applicationId)) {
+            throw new ResourceNotFoundException("Application document");
+        }
+        return document;
+    }
+
+    public byte[] readDocument(ApplicationDocument document) {
+        return fileStorage.read(document.getStorageKey());
+    }
+
+    @Transactional(readOnly = true)
     public PageResponse<AgentCheckResponse> listChecks(UUID applicationId, PageRequest page) {
         requireApplication(applicationId);
         return PageResponse.from(checks.findByApplication_IdOrderByCreatedAtDesc(applicationId, page),

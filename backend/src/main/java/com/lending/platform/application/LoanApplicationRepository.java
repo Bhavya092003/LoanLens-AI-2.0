@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface LoanApplicationRepository extends JpaRepository<LoanApplication, UUID> {
+    java.util.Optional<LoanApplication> findByApplicationReference(String applicationReference);
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select application from LoanApplication application where application.id=:id")
     java.util.Optional<LoanApplication> findByIdForUpdate(@Param("id") UUID id);

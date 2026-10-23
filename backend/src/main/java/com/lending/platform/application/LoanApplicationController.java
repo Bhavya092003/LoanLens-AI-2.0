@@ -9,6 +9,8 @@ import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,6 +64,18 @@ public class LoanApplicationController {
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "20") @Min(1) @Max(100) int size) {
         return service.listDocuments(applicationId, PageRequest.of(page, size));
+    }
+
+    @GetMapping("/{applicationId}/documents/{documentId}/content")
+    public ResponseEntity<byte[]> documentContent(@PathVariable UUID applicationId, @PathVariable UUID documentId) {
+        ApplicationDocument document = service.getDocument(applicationId, documentId);
+        MediaType mediaType;
+        try { mediaType = MediaType.parseMediaType(document.getContentType()); }
+        catch (IllegalArgumentException exception) { mediaType = MediaType.APPLICATION_OCTET_STREAM; }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + document.getOriginalFilename().replace("\"", "") + "\"")
+                .contentType(mediaType)
+                .body(service.readDocument(document));
     }
 
     @PostMapping("/{applicationId}/submit")
